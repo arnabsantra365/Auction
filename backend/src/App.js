@@ -14,6 +14,8 @@ app.use(express.json()); // body parser required for getting data
 app.use(bodyParser.json());
 
 import auctionRoute from "../src/routes/auction.routes.js"
-app.use("/api/v1",auctionRoute);
+app.use("/api/v1/auctions",auctionRoute);
+import productRoute from "../src/routes/product.routes.js"
+app.use("/api/v1/product",productRoute);
 
 export {app};

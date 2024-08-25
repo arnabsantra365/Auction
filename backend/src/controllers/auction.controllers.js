@@ -1,15 +1,6 @@
-import express from "express";
-const router = express.Router();
-import {Product} from "../models/product.models.js"
+
 import { Auction } from "../models/auction.models.js";
-const productFunc = async (req, res) => {
-    try {
-      const products = await Product.find();
-      res.json(products);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  }
+
 const beginAuction =  async (req, res) => {
     const { buyer, selectedVendors, productRange, budget, requirements } = req.body;
     const auction = new Auction({
@@ -58,4 +49,4 @@ const bidFunction = async(req,res) =>{
   }
 }
 
-export {productFunc,beginAuction,bidFunction} ;
+export {beginAuction,bidFunction} ;
