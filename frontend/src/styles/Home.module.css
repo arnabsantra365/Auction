@@ -1,0 +1,14 @@
+.first{
+    background-color: blueviolet;
+    
+    width: 90vw;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding:100px 20px;
+}
+.fimage{
+   display: flex;
+   
+}
