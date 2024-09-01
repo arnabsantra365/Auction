@@ -51,29 +51,7 @@
 // //   );
 // // }
 
-// // export default App;
-// import React from 'react';
-// import {BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-// import ProductList from './components/ProductList';
-// import AuctionForm from './components/AuctionForm';
-// import AuctionResult from './components/AuctionResult';
 
-// function App() {
-//   return (
-//     <Router>
-//       <div className="App">
-//         {/* <h1>SaaS Marketplace</h1> */}
-//         <Routes>
-//           <Route exact path="/" element={<ProductList/>} />
-//           <Route path="/auction" element={<AuctionForm/>} />
-//           <Route path="/result/:id" element={<AuctionResult/>} />
-//         </Routes>
-//       </div>
-//     </Router>
-//   );
-// }
-
-// export default App;
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
