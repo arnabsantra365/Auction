@@ -1,79 +1,86 @@
-// client/src/components/AuctionForm.js
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import ProductList from './ProductList';
 
 function AuctionForm() {
-  const [selectedVendors, setSelectedVendors] = useState([]);
-  const [productRange, setProductRange] = useState('');
+  const [selectedProducts, setSelectedProducts] = useState([]);
   const [budget, setBudget] = useState('');
   const [requirements, setRequirements] = useState('');
-  const history = useHistory();
+  const navigate = useNavigate();
+
+  const handleProductSelect = (product) => {
+    setSelectedProducts(prevSelected => {
+      const isAlreadySelected = prevSelected.some(p => p._id === product._id);
+      if (isAlreadySelected) {
+        return prevSelected.filter(p => p._id !== product._id);
+      } else if (prevSelected.length < 3) {
+        return [...prevSelected, product];
+      } else {
+        alert('You can only select 3 products. Please deselect one before adding another.');
+        return prevSelected;
+      }
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (selectedVendors.length !== 3) {
-      alert('Please select exactly 3 vendors');
+    if (selectedProducts.length !== 3) {
+      alert('Please select exactly 3 products');
       return;
     }
     try {
-      const response = await axios.post('http://localhost:5000/api/auctions', {
+      const response = await axios.post('http://localhost:3000/api/v1/auctions', {
         buyer: 'Example Company',
-        selectedVendors,
-        productRange,
+        selectedVendors: selectedProducts.map(p => p.vendor),
+        productRange: selectedProducts[0].category,
         budget: parseFloat(budget),
         requirements,
       });
-      history.push(`/result/${response.data._id}`);
+      navigate(`/result/${response.data._id}`);
     } catch (error) {
       console.error('Error creating auction:', error);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Create New Auction</h2>
-      <div>
-        <label>Select 3 Vendors:</label>
-        <select 
-          multiple 
-          value={selectedVendors} 
-          onChange={(e) => setSelectedVendors(Array.from(e.target.selectedOptions, option => option.value))}
-        >
-          <option value="GitHub">GitHub</option>
-          <option value="GitLab">GitLab</option>
-          <option value="Bitbucket">Bitbucket</option>
-          {/* Add more vendors as needed */}
-        </select>
-      </div>
-      <div>
-        <label>Product Range:</label>
-        <input 
-          type="text" 
-          value={productRange} 
-          onChange={(e) => setProductRange(e.target.value)}
-          placeholder="e.g. Code Collaboration Platform"
-        />
-      </div>
-      <div>
-        <label>Budget:</label>
-        <input 
-          type="number" 
-          value={budget} 
-          onChange={(e) => setBudget(e.target.value)}
-          placeholder="Enter your budget"
-        />
-      </div>
-      <div>
-        <label>Requirements:</label>
-        <textarea 
-          value={requirements} 
-          onChange={(e) => setRequirements(e.target.value)}
-          placeholder="Enter your specific requirements"
-        />
-      </div>
-      <button type="submit">Start Auction</button>
-    </form>
+    <div>
+      <ProductList onProductSelect={handleProductSelect} selectedProducts={selectedProducts} />
+      <form onSubmit={handleSubmit}>
+        <h2>Create New Auction</h2>
+        <div>
+          <h3>Selected Products ({selectedProducts.length}/3):</h3>
+          {selectedProducts.map(product => (
+            <div key={product._id}>
+              <p>{product.name} - {product.vendor}</p>
+              <button type="button" onClick={() => handleProductSelect(product)}>Remove</button>
+            </div>
+          ))}
+        </div>
+        <div>
+          <label>Budget:</label>
+          <input 
+            type="number" 
+            value={budget} 
+            onChange={(e) => setBudget(e.target.value)}
+            placeholder="Enter your budget"
+            required
+          />
+        </div>
+        <div>
+          <label>Requirements:</label>
+          <textarea 
+            value={requirements} 
+            onChange={(e) => setRequirements(e.target.value)}
+            placeholder="Enter your specific requirements"
+            required
+          />
+        </div>
+        <button type="submit" disabled={selectedProducts.length !== 3}>
+          {selectedProducts.length === 3 ? 'Start Auction' : 'Select 3 Products to Start'}
+        </button>
+      </form>
+    </div>
   );
 }
 

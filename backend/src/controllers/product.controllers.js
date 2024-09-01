@@ -21,20 +21,20 @@ const listProduct = async (req, res) => {
 
   const getProductByCategory = async (req, res) => {
     try {
-        const { category } = req.query;
-        let query = {};
-        if (category) {
-          query.category = category;
-        }
-    
-        console.log("Query:", query);  // Log the query object
-        const products = await Product.find(query);
-        console.log("Products found:", products);  // Log the found products
-    
-        res.json(products);
-      } catch (error) {
-        res.status(500).json({ message: error.message });
-      }
+    const { category } = req.query;
+    let query = {};
+    if (category) {
+      query.category = category;
+    }
+
+    console.log("Query:", query);  // Log the query object
+    const products = await Product.find(query).select('-_id name category description basePrice vendor features');
+    console.log("Products found:", products);  // Log the found products
+
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
   }
 
   export {listProduct,getAllCategory,getProductByCategory};

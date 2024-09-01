@@ -3,7 +3,7 @@ import { listProduct,getAllCategory,getProductByCategory } from "../controllers/
 const router = Router();
 
 router.route("/").post(listProduct);
-router.route("/").get(getAllCategory);
-router.route("/categories").get(getProductByCategory);
+router.route("/").get(getProductByCategory);
+router.route("/categories").get(getAllCategory);
 
 export default router;

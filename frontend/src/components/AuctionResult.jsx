@@ -1,4 +1,5 @@
 // client/src/components/AuctionResult.js
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -10,11 +11,11 @@ function AuctionResult() {
   useEffect(() => {
     const fetchAuction = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/auctions/${id}`);
+        const response = await axios.get(`http://localhost:3000/api/auctions/${id}`);
         setAuction(response.data);
 
         if (response.data.status === 'pending') {
-          const auctionResponse = await axios.post(`http://localhost:5000/api/auctions/${id}/start`);
+          const auctionResponse = await axios.post(`http://localhost:3000/api/auctions/${id}/start`);
           setAuction(auctionResponse.data);
         }
       } catch (error) {
